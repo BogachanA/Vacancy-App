@@ -159,5 +159,4 @@ fabric.properties
 /media
 
 #migrations
-/catalog/migrations
-/studentAds/migrations
+/classAvailable/migrations
