@@ -6,6 +6,7 @@ import datetime
 # Create your models here.
 class Classroom(models.Model):
     name = models.CharField(max_length=15, null=False, default="001")
+    type = models.CharField(max_length=50, null=False, default="Class")
     capacity = models.IntegerField(default=0)
     exam_capacity = models.IntegerField(default=0)
     # Reservations
