@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 import datetime
 
 
-# Create your models here.
+# Create your models here. Wassup
 class Classroom(models.Model):
     name = models.CharField(max_length=15, null=False, default="001")
     type = models.CharField(max_length=50, null=False, default="Class")
