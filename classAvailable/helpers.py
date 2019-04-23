@@ -6,6 +6,7 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from classAvailable.models import Classroom, Reservation
 
 def read_data(loc):
     #opening the excel file
@@ -19,20 +20,16 @@ def read_data(loc):
     return classroom_data
 
 #read_data("Book1.xls")
+def createClassObjects():
+    class_data=read_data("classAvailable/Book1.xls")
+    for data in class_data:
+        new_c = Classroom.objects.create(name=data[0],type=data[3],capacity=int(data[1]),exam_capacity=int(data[2]))
+        new_c.save()
 
 
 ##############################################################
 #GOOGLE CALENDAR API CALL METHODS
 ##############################################
-
-#client id
-#706799990508-ls1tmks87ur8p41iou5bc76muv6b43lu.apps.googleusercontent.com
-#client secret
-#GwMSbykzaSojhQeeounO3Egz
-
-
-
-# If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def getCalendarID(service,roomCode):
@@ -42,21 +39,23 @@ def getCalendarID(service,roomCode):
       for calendar_list_entry in calendar_list['items']:
         print (calendar_list_entry['summary'])
       page_token = calendar_list.get('nextPageToken')
+      print(page_token)
       if not page_token:
         break
     for i in calendar_list['items']:
         print()
-        print(i['summary'])
+        #print(i)
         print(roomCode)
         print()
         if i['summary'] == roomCode:
-            print(i)
+            print(i['summary'])
             return i['id']
 
     return 'none'
 
 
-def main():
+def syncEventsFromCal(roomCode):
+    print(str(datetime.datetime.now().date())+"T"+str(datetime.datetime.now().time().replace(microsecond=0)))
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
@@ -74,67 +73,45 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'classAvailable/credentials.json', SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
+    print(service)
+
+
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
-    iddd=getCalendarID(service,'A101')
+    iddd=getCalendarID(service,roomCode=roomCode)
     print(iddd)
+    #generateEvent(iddd, "deneme", "denemehoca", '2019-05-28T09:00:00', '2019-05-28T12:00:00' )
     print(service.calendars().get(calendarId=iddd).execute())
     events_result = service.events().list(calendarId=iddd, timeMin=now,
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-    reservations = []
+
     if not events:
         print('No upcoming events found.')
+    eventlist=[]
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         end = event['end'].get('dateTime', event['end'].get('date'))
-        print(start,end, event['summary'])
+        print(start+"*"+end+"*"+event['summary'])
+        eventlist.append(start+"*"+end+"*"+event['summary'])
+    return eventlist
 
-"""  ---Event Creation Sample---
 
 
-    event = {
-  'summary': 'Google I/O 2015',
-  'location': '800 Howard St., San Francisco, CA 94103',
-  'description': 'A chance to hear more about Google\'s developer products.',
-  'start': {
-    'dateTime': '2015-05-28T09:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-  'end': {
-    'dateTime': '2015-05-28T17:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-  'recurrence': [
-    'RRULE:FREQ=DAILY;COUNT=2'
-  ],
-  'attendees': [
-    {'email': 'lpage@example.com'},
-    {'email': 'sbrin@example.com'},
-  ],
-  'reminders': {
-    'useDefault': False,
-    'overrides': [
-      {'method': 'email', 'minutes': 24 * 60},
-      {'method': 'popup', 'minutes': 10},
-    ],
-  },
-}
+##############################################################
+#CALENDAR NAME FILTERS FOR SCHOOLS
+##############################################
 
-    event = service.events().insert(calendarId='primary', body=event).execute()
-    print ('Event created: %s' % (event.get('htmlLink')))
-
-"""
-
-print(read_data("/Users/bogachanarslan/Downloads/Book1.xls"))
-
+def refineForMEF(e):
+    e=e.split(" ")
+    return e[0]+" "+e[1]
