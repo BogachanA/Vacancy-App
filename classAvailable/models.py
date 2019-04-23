@@ -18,6 +18,7 @@ class Classroom(models.Model):
 class Reservation(models.Model):
     by = models.ForeignKey(get_user_model(), null=False, default=1, on_delete=models.SET_DEFAULT) #TODO user
     res_class = models.ManyToManyField(Classroom)
+    student_total = models.IntegerField(default=0)
     instructor = models.CharField(max_length=100, null=True)
     proctor = models.CharField(max_length=100, null=True)
     res_date_start = models.DateTimeField(null=True)

@@ -8,7 +8,7 @@ class ClassAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 class ResAdmin(admin.ModelAdmin):
-    list_display = ('by','get_class_list','instructor','res_date_start','res_date_end')
+    list_display = ('by','get_class_list','student_total','instructor','res_date_start','res_date_end')
     ordering = ('res_date_start','by')
 
 
