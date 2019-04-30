@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from .helpers import generateEvent, manualDateTimeToGoogle
 import datetime
 
 #naber alp geldimi?
@@ -25,6 +26,14 @@ class Reservation(models.Model):
     proctor = models.CharField(max_length=100, null=True)
     res_date_start = models.DateTimeField(null=True)
     res_date_end = models.DateTimeField(null=True)
+
+    def save(self, existing=False, *args, **kwargs):
+        #do_something()
+        if not existing:
+            generateEvent("", self.description, self.instructor + " - " + self.proctor,
+                          manualDateTimeToGoogle(str(self.res_date_start)),
+                          manualDateTimeToGoogle(str(self.res_date_end)))
+        super().save(*args, **kwargs)  # Call the "real" save() method.
 
     def __str__(self):
         return "Reservation for {0} by ({1}) on {2}".format(self.get_class_list(),self.by,self.res_date_start)
