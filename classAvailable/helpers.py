@@ -6,8 +6,9 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from classAvailable.models import Classroom, Reservation
+from .models import Classroom, Reservation
 from datetime import datetime
+from django.utils import timezone
 from tzlocal import get_localzone # $ pip install tzlocal
 
 def read_data(loc):
@@ -30,7 +31,7 @@ def createClassObjects():
         new_c.save()
 
 def manualDateTimeToGoogle(datetimeString):
-    result=datetimeString.replace(" ", "T", 1).split("+")[0] + getUTCoffset()
+    result=datetimeString.replace(" ", "T", 1).split("+")[0]
     return result
 
 
@@ -122,8 +123,8 @@ def syncEventsFromCal(roomCode):
 ##############################################
 
 def getUTCoffset():
-    tz = get_localzone() # local timezone
-    d = datetime.now(tz) # or some other local date
+    #tz = get_localzone() # local timezone #TODO TIMEZONE NOT WORKİNG
+    d = timezone.now() # or some other local date
     utc_offset = d.utcoffset().total_seconds()
     print(utc_offset)
     hour, minutes = divmod(divmod(utc_offset,60)[0],60)

@@ -4,4 +4,5 @@ from django.urls import path, re_path, include
 
 urlpatterns = [
     path('populate/<str:classID>', views.populateClassCal, name='populate_cal'),
+    path('timezone/', views.returnTZ, name='timezone_retrieve'),
 ]

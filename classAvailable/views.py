@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 from classAvailable.helpers import syncEventsFromCal, refineForMEF
 from classAvailable.models import *
+from django.utils import timezone
 
 # Create your views here.
 def populateClassCal(request, classID):
@@ -30,3 +31,7 @@ def populateClassCal(request, classID):
         return HttpResponse("Hello, population of "+classID+" is successful.")
     else:
         return HttpResponse("Warning: You are not logged into the system. Cannot proceed!  Kendine gel.")
+
+
+def returnTZ(request):
+    return HttpResponse(request.session.get('django_timezone'))

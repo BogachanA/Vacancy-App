@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from .helpers import generateEvent, manualDateTimeToGoogle
 import datetime
 
 #naber alp geldimi?
@@ -29,6 +28,7 @@ class Reservation(models.Model):
 
     def save(self, existing=False, *args, **kwargs):
         #do_something()
+        from .helpers import generateEvent, manualDateTimeToGoogle
         if not existing:
             generateEvent("", self.description, self.instructor + " - " + self.proctor,
                           manualDateTimeToGoogle(str(self.res_date_start)),
