@@ -3,6 +3,8 @@ cachetools==3.1.0
 certifi==2019.3.9
 chardet==3.0.4
 Django==2.2
+django-appconf==1.0.3
+django-compressor==2.3
 google-api-python-client==1.7.8
 google-auth==1.6.3
 google-auth-httplib2==0.0.3
@@ -14,12 +16,15 @@ psycopg2==2.8.2
 pyasn1==0.4.5
 pyasn1-modules==0.2.4
 pytz==2018.9
+rcssmin==1.0.6
 requests==2.21.0
 requests-oauthlib==1.2.0
+rjsmin==1.1.0
 rsa==4.0
 six==1.12.0
 soupsieve==1.9.1
 sqlparse==0.3.0
+tzlocal==1.5.1
 uritemplate==3.0.0
 urllib3==1.24.2
 xlrd==1.2.0

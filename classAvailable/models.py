@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 import datetime
 
-#naber alp geldimi?
+
 #TODO custom user
 
 # Create your models here. Wassup
@@ -26,11 +26,11 @@ class Reservation(models.Model):
     res_date_start = models.DateTimeField(null=True)
     res_date_end = models.DateTimeField(null=True)
 
-    def save(self, existing=False, *args, **kwargs):
+    def save(self, existing, *args, **kwargs):
         #do_something()
         from .helpers import generateEvent, manualDateTimeToGoogle
         if not existing:
-            generateEvent("", self.description, self.instructor + " - " + self.proctor,
+            generateEvent("", str(self.description), str(self.instructor) + " - " + str(self.proctor),
                           manualDateTimeToGoogle(str(self.res_date_start)),
                           manualDateTimeToGoogle(str(self.res_date_end)))
         super().save(*args, **kwargs)  # Call the "real" save() method.

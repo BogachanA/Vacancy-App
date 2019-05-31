@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from .models import Classroom, Reservation
-from datetime import datetime
+import datetime
 from django.utils import timezone
 from tzlocal import get_localzone # $ pip install tzlocal
 
@@ -31,6 +31,13 @@ def createClassObjects():
         new_c.save()
 
 def manualDateTimeToGoogle(datetimeString):
+    print()
+    print()
+    print()
+    print(str(datetimeString))
+    print()
+    print()
+    print()
     result=datetimeString.replace(" ", "T", 1).split("+")[0]
     return result
 
@@ -82,7 +89,7 @@ def syncEventsFromCal(roomCode):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'classAvailable/credentials.json', SCOPES)
+                'classAvailable/client_secret_224280465504-kh3a3in47kd4l1titpu0a779be2hvdjm.apps.googleusercontent.com.json', SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
@@ -141,7 +148,7 @@ def getUTCoffset():
     else:
         hour_str="+"+str(hour)
     print(hour_str+min_str)
-    return hour_str+min_str
+    return hour_str+":"+min_str
 
 
 def generateEvent(calenderID, title, instructor,start,end):
@@ -158,7 +165,7 @@ def generateEvent(calenderID, title, instructor,start,end):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                'client_secret_224280465504-kh3a3in47kd4l1titpu0a779be2hvdjm.apps.googleusercontent.com.json', SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
@@ -170,11 +177,11 @@ def generateEvent(calenderID, title, instructor,start,end):
   'summary': title,
   'description': instructor,
   'start': {
-    'dateTime': start+getUTCoffset(),
+    'dateTime': start+":00"+getUTCoffset(),
     'timeZone': 'Europe/Istanbul',
   },
   'end': {
-    'dateTime': end+getUTCoffset(),
+    'dateTime': end+":00"+getUTCoffset(),
         'timeZone': 'Europe/Istanbul',
   },
   'reminders': {
@@ -189,8 +196,6 @@ def generateEvent(calenderID, title, instructor,start,end):
     event = service.events().insert(calendarId='gokcekal@mef.edu.tr', body=event).execute()
     print ('Event created: %s' % (event.get('htmlLink')))
     print(getUTCoffset())
-
-
 
 
 
