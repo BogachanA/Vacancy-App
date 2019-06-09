@@ -1,0 +1,156 @@
+{% extends 'newReservation.html' %}
+
+
+{% block head2 %}
+<style type="text/css">
+    @keyframes shadowThrob {
+        from {box-shadow: inset 0 0 0px rgba(0,0,0,0);}
+        to {box-shadow: inset 0 0 6px rgba(0,0,0,0.7);}
+    }
+    .classBox.shadowSelect{
+        animation: shadowThrob 0.4s forwards;
+        animation-direction: revert;
+    }
+    .classCheckbox{
+        visibility: hidden;
+    }
+
+</style>
+{% endblock %}
+
+{% block innerContent %}
+    {% if clError %}
+    <div class="align-items-center" id="clashMessage">
+        <span class="icon icon-warning" style="size: 50px;"></span><br>
+        {% for c in clist %}
+            {% if c.1|length != 0 %}
+                <p class="clashClass"><span class="icon ui-icon-bullet"></span> Conflict for: {{ c.0.name }}</p>
+                {% for r in c.1 %}
+                    <p class="clashClass" id="{{ c.0.name }}clash{{ forloop.counter }}">
+                        "{{ r.description }}" reservation for {{ r.res_date_start }}
+                    </p><br>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <hr><br>
+    {% endif %}
+    <form id="resForm" method="post" action="{% url 'new_reservation' %}">
+        {% csrf_token %}
+        {% for clash in clist %}
+            <div class="inputField classBox" id="{{ clash.0.name }}Box"
+                 style="width:100%;margin: 3px; padding: 2%; border: 3px solid gray; background: {% if clash.1|length == 0 %} rgba(102,185,87,0.75) {% else %} rgba(241,112,37,0.58) {% endif %};">
+                <label class="classLabel" style=""><input type="checkbox" class="inputField classCheckbox"
+                       id="{{ clash.0.name }}Checkbox"
+                       value="{{ clash.0.name }}">{{ clash.0.name }}</label>
+                <p class="classBoxCapacity" style="float: right; display: inline;">{% if resType == '1' %} {{ clash.0.exam_capacity }} {% else %} {{ clash.0.capacity }} {% endif %}</p>
+            </div>
+        {% endfor %}
+        <hr>
+        {% for o in others %}
+            <div class="inputField classBox" id="{{ o.name }}Box"
+                 style="width:100%;margin: 3px; padding: 2%;border: 3px solid gray; background: rgba(155,188,200,0.67);">
+                <label class="classLabel"><input type="checkbox" class="inputField classCheckbox"
+                       id="{{ o.name }}Checkbox"
+                       value="{{ o.name }}">{{ o.name }}</label>
+                <p class="classBoxCapacity" style="float: right; display: inline;">{% if resType == '1' %} {{ o.exam_capacity }} {% else %} {{ o.capacity }} {% endif %}</p>
+            </div>
+        {% endfor %}
+        <button class="hoverButtons" type="submit" id="submitbutton">Submit</button>
+        <input type="hidden" name="next" value="{{next}}">
+    </form>
+{% endblock %}
+
+{% block step2script %}
+<script>
+    $(function () {});
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function correctTime(t){
+        if (t=='noon') {
+            console.log(t)
+            return '12:00 pm';
+        }
+        else if(t.includes(".")) {
+            console.log(t)
+            return t.replace(/\./g,"");
+        }
+        else return t;
+    }
+
+    function create_post(){
+        let classString=""
+        $('.classCheckbox').each(function () {
+            if ($(this).prop('checked')) {
+              classString+=$(this).parent().text()+"-"
+            }
+        });
+        classString=classString.substring(0,classString.length-1);
+        console.log(classString);
+        var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            url: "submitRes",
+            type: "post", // or "get"
+            data: {
+                "csrfmiddlewaretoken": csrftoken,
+                "desc": "{{ form.desc }}",
+                "type": {{ form.type }},
+                "capacity": {{ form.capacity }},
+                "classList": classString,
+                "instructor": "{{ form.instructor }}",
+                "proctor": {{ form.proctor }},
+                "day": "{{ form.day }}",
+                "start": correctTime("{{ form.start }}"),
+                "end": correctTime("{{ form.end }}"),
+            },
+            success: function(json) {
+                alert(json["hi"]);
+            },
+            error: function (xhr,errmsg,err) {
+                console.log(xhr + " xhr, err: "+errmsg+" err "+err)
+            }
+        });
+    }
+
+    $(function () {
+       $('.classBox').click(function () {
+           //console.log($("label input.classCheckbox",this).prop('checked'));
+           let box=$("label input.classCheckbox",this);
+           if (box.prop('checked')) {
+               box.prop('checked',false);
+               $(this).removeClass('shadowSelect');
+           } else {
+               box.prop('checked',true);
+               $(this).addClass('shadowSelect');
+           }
+           $('.classCheckbox').each(function () {
+              if ($(this).prop('checked')) {
+                  console.log($(this).parent().text());
+              }
+
+           });
+           console.log("----");
+
+       });
+    });
+    $('#resForm').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!")  // sanity check
+        create_post();
+    });
+</script>
+{% endblock %}

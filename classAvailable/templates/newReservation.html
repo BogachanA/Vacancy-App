@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load compress %}
+
+{% block head %}
+    {% block head2 %}
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+<div class="container align-content-center align-items-center">
+    <div class="col-sm-12 col-md-8 col-lg-6 align-content-center align-items-center">
+        {% block innerContent %}
+        <form id="resForm" method="post" action="{% url 'new_reservation' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="hoverButtons" type="submit" id="submitbutton">Submit</button>
+            <input type="hidden" name="next" value="{{next}}">
+        </form>
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function () {
+            console.log('document ready');
+            $('.timepicker').mdtimepicker({
+                timeFormat:'hh:mm',
+                format:'hh:mm',
+                theme:'red',
+            });
+        })
+    </script>
+    {% block step2script %}
+    {% endblock %}
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import ArrayField
 import datetime
 
 
@@ -11,6 +12,7 @@ class Classroom(models.Model):
     type = models.CharField(max_length=50, null=False, default="Class")
     capacity = models.IntegerField(default=0)
     exam_capacity = models.IntegerField(default=0)
+    sync_token = models.CharField(max_length=256, null=True, default=None)
 
     def __str__(self):
         return self.name
@@ -21,19 +23,28 @@ class Reservation(models.Model):
     res_class = models.ManyToManyField(Classroom)
     description = models.TextField(max_length=350, default="")
     student_total = models.IntegerField(default=0)
-    instructor = models.CharField(max_length=100, null=True)
-    proctor = models.CharField(max_length=100, null=True)
+    instructor = models.CharField(max_length=1024,null=True)
+    proctor_count = models.IntegerField(null=True)
     res_date_start = models.DateTimeField(null=True)
     res_date_end = models.DateTimeField(null=True)
+    id_list = ArrayField(models.CharField(max_length=256, null=True, default=None), null=True, default=None)
 
-    def save(self, existing, *args, **kwargs):
+    def save(self, existing=False, *args, **kwargs):
         #do_something()
         from .helpers import generateEvent, manualDateTimeToGoogle
-        if not existing:
-            generateEvent("", str(self.description), str(self.instructor) + " - " + str(self.proctor),
-                          manualDateTimeToGoogle(str(self.res_date_start)),
-                          manualDateTimeToGoogle(str(self.res_date_end)))
-        super().save(*args, **kwargs)  # Call the "real" save() method.
+        super().save(*args, **kwargs) #TODO res_class is empty during initial save from admin panel
+        ''''''
+        for c in self.res_class.all():
+            print("**********")
+            print("**********")
+            print("**********")
+            print(c.name)
+            if not existing:
+                new_id=generateEvent(c.name, str(self.description),
+                              str(self.instructor) + " - Proctor count: " + str(self.proctor_count),
+                              manualDateTimeToGoogle(str(self.res_date_start)),
+                              manualDateTimeToGoogle(str(self.res_date_end)))
+                self.id_list.append(new_id)
 
     def __str__(self):
         return "Reservation for {0} by ({1}) on {2}".format(self.get_class_list(),self.by,self.res_date_start)
