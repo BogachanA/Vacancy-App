@@ -7,8 +7,15 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from .models import Classroom, Reservation
 import datetime
+from VacancyApp import settings
+import VacancyApp
 from django.utils import timezone
 from tzlocal import get_localzone # $ pip install tzlocal
+
+def syncAllClassrooms():
+    classrooms=Classroom.objects.all()
+    for c in classrooms:
+        syncEventsFromCal(c.name)
 
 def read_data(loc):
     #opening the excel file
@@ -115,6 +122,8 @@ def syncEventsFromCal(roomCode):
     NEXT_SYNC_TOKEN = events_result['nextSyncToken']
 
     print(service.settings().list().execute())
+    settings.TIME_ZONE=service.settings().list().execute()['timezone']
+
     # print(NEXT_SYNC_TOKEN)
     print("CURRENT_SYNC_TOKEN\t" + str(CURRENT_SYNC_TOKEN))
     print("NEXT_SYNC_TOKEN\t\t" + str(NEXT_SYNC_TOKEN))
@@ -226,6 +235,7 @@ def generateEvent(classRoom, title, instructor, start, end):
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
+
     settings = service.settings().list().execute()
     calenderID=getCalendarID(service,classRoom)
 
@@ -235,11 +245,11 @@ def generateEvent(classRoom, title, instructor, start, end):
         'summary': title,
         'description': instructor,
         'start': {
-            'dateTime': start + ":00" + getUTCoffset(),
+            'dateTime': start + "+03:00", #getUTCoffset(),
             'timeZone': 'Europe/Istanbul',
         },
         'end': {
-            'dateTime': end + ":00" + getUTCoffset(),
+            'dateTime': end + "+03:00", #getUTCoffset(),
             'timeZone': 'Europe/Istanbul',
         },
         'reminders': {
@@ -336,9 +346,9 @@ def resFromRequest(form):
 
     preferred_done=False
     dts=datetime.datetime.combine(form['day'],form['start'])  #TODO timezone info from user
-    dts=pytz.timezone("Greenwich").localize(dts)
+    dts=pytz.timezone(settings.TIME_ZONE).localize(dts)
     dte=datetime.datetime.combine(form['day'],form['end'])
-    dte = pytz.timezone("Greenwich").localize(dte) #TODO find which timezone to compare
+    dte = pytz.timezone(settings.TIME_ZONE).localize(dte) #TODO find which timezone to compare
 
     for c in form['pref_class']:
         # print(isAvailable(c,dts,dte))

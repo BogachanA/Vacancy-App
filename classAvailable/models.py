@@ -33,7 +33,7 @@ class Reservation(models.Model):
         #do_something()
         from .helpers import generateEvent, manualDateTimeToGoogle
         super().save(*args, **kwargs) #TODO res_class is empty during initial save from admin panel
-        ''''''
+        '''
         for c in self.res_class.all():
             print("**********")
             print("**********")
@@ -45,9 +45,13 @@ class Reservation(models.Model):
                               manualDateTimeToGoogle(str(self.res_date_start)),
                               manualDateTimeToGoogle(str(self.res_date_end)))
                 self.id_list.append(new_id)
+        '''
 
     def __str__(self):
-        return "Reservation for {0} by ({1}) on {2}".format(self.get_class_list(),self.by,self.res_date_start)
+        if self.id:
+            return "Reservation for {0} by ({1}) on {2}".format([c.name for c in self.res_class.all()],self.by,self.res_date_start)
+        else:
+            return "Reservation by ({0}) on {1}".format(self.by,self.res_date_start)
 
     def get_class_list(self):
         return ", ".join([c.name for c in self.res_class.all()])

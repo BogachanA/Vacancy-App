@@ -5,7 +5,44 @@
 <style type="text/css">
     @keyframes shadowThrob {
         from {box-shadow: inset 0 0 0px rgba(0,0,0,0);}
-        to {box-shadow: inset 0 0 6px rgba(0,0,0,0.7);}
+        to {box-shadow: inset 0 0 12px rgba(0,0,0,0.7);}
+    }
+    .classBox{
+        box-shadow: 0 0 3px 1px rgba(0,0,0,0.2);
+        text-align: left;
+        vertical-align: center;
+        color: #000000;
+        font-family: 'Raleway', sans-serif;
+        transition: all 0.7s;
+        border-radius: 3px;
+        background: rgb(255,255,255);
+        background: -moz-linear-gradient(217deg, rgba(255,255,255,1) 0%, rgba(205,199,207,0.604079131652661) 49%, rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(217deg, rgba(255,255,255,1) 0%, rgba(205,199,207,0.604079131652661) 49%, rgba(255,255,255,1) 100%);
+        background: linear-gradient(217deg, rgba(255,255,255,1) 0%, rgba(205,199,207,0.604079131652661) 49%, rgba(255,255,255,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#ffffff",GradientType=1);
+    }
+    .classBox:hover{
+    }
+    .classBox.label{
+        text-shadow: 0 0 #000000;
+        transition: text-shadow 0.6s;
+    }
+    .classBox.label:hover{
+        text-shadow: 3px 3px #000000;
+    }
+    .classBox.clashing{
+        background: rgb(255,101,21);
+        background: -moz-linear-gradient(216deg, rgba(255,101,21,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        background: -webkit-linear-gradient(216deg, rgba(255,101,21,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        background: linear-gradient(216deg, rgba(255,101,21,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff6515",endColorstr="#fcb045",GradientType=1);
+    }
+    .classBox.available{
+        background: rgb(32,143,4);
+        background: -moz-linear-gradient(217deg, rgba(32,143,4,1) 0%, rgba(130,194,127,1) 61%, rgba(49,244,174,1) 100%);
+        background: -webkit-linear-gradient(217deg, rgba(32,143,4,1) 0%, rgba(130,194,127,1) 61%, rgba(49,244,174,1) 100%);
+        background: linear-gradient(217deg, rgba(32,143,4,1) 0%, rgba(130,194,127,1) 61%, rgba(49,244,174,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#208f04",endColorstr="#31f4ae",GradientType=1);
     }
     .classBox.shadowSelect{
         animation: shadowThrob 0.4s forwards;
@@ -38,8 +75,8 @@
     <form id="resForm" method="post" action="{% url 'new_reservation' %}">
         {% csrf_token %}
         {% for clash in clist %}
-            <div class="inputField classBox" id="{{ clash.0.name }}Box"
-                 style="width:100%;margin: 3px; padding: 2%; border: 3px solid gray; background: {% if clash.1|length == 0 %} rgba(102,185,87,0.75) {% else %} rgba(241,112,37,0.58) {% endif %};">
+            <div class="inputField classBox {% if clash.1|length == 0 %}available{% else %}clashing{% endif %}" id="{{ clash.0.name }}Box"
+                 style="width:100%;margin: 3px; padding: 2% 2% 0% 2%;">
                 <label class="classLabel" style=""><input type="checkbox" class="inputField classCheckbox"
                        id="{{ clash.0.name }}Checkbox"
                        value="{{ clash.0.name }}">{{ clash.0.name }}</label>
@@ -48,8 +85,8 @@
         {% endfor %}
         <hr>
         {% for o in others %}
-            <div class="inputField classBox" id="{{ o.name }}Box"
-                 style="width:100%;margin: 3px; padding: 2%;border: 3px solid gray; background: rgba(155,188,200,0.67);">
+            <div class="inputField classBox otherBox" id="{{ o.name }}Box"
+                 style="width:100%;margin: 10px; padding: 2% 2% 0% 2%;">
                 <label class="classLabel"><input type="checkbox" class="inputField classCheckbox"
                        id="{{ o.name }}Checkbox"
                        value="{{ o.name }}">{{ o.name }}</label>

@@ -130,15 +130,17 @@ def submitRes(request):
             etime=datetime.datetime.strptime(data.get('end'),"%I:%M %p").time()
         except:
             etime = datetime.datetime.strptime(data.get('end'), "%I %p").time()
+        print("*******∆∆∆∆∆∆∆∆******")
+        print(stime,etime)
         rstart=datetime.datetime.combine(day,stime)
         rend=datetime.datetime.combine(day,etime)
         res=Reservation(description=data.get('desc'),student_total=data.get('capacity'),
                         instructor=data.get('instructor'), proctor_count=data.get('proctor'),
-                        res_date_start=rstart,res_date_end=rend)
+                        res_date_start=rstart,res_date_end=rend,id_list=[])
+        res.save(existing=True)
         for c in classes:
             cl=Classroom.objects.get(name=c)
             res.res_class.add(cl)
-        res.save(existing=True)
 
         for c in res.res_class.all():
             new_id = generateEvent(c.name, str(res.description),
