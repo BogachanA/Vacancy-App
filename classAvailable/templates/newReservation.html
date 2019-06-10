@@ -27,10 +27,24 @@
     <script>
         $(function () {
             console.log('document ready');
-            $('.timepicker').mdtimepicker({
+            $('.timepickerM').mdtimepicker({
                 timeFormat:'hh:mm',
                 format:'hh:mm',
                 theme:'red',
+            });
+            $('#durationInput').prop('required',false).parent().hide();
+            $('#selectionInput').change(function () {
+                let sel=$(this).find("input.selectRadio:checked").val();
+                if (sel==1) {
+                    $('label[for=startInput]').text("Başlangıç Saati:");
+                    $('label[for=endInput]').text("Bitiş Saati:");
+                    $('#durationInput').prop('required',false).parent().hide();
+                }
+                else {
+                    $('label[for=startInput]').text("Zaman Aralığı Başlangıcı:");
+                    $('label[for=endInput]').text("Zaman Aralığı Bitişi:");
+                    $('#durationInput').prop('required',true).parent().show();
+                }
             });
         })
     </script>

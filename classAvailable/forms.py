@@ -24,9 +24,10 @@ class resForm(forms.Form):
     proctor=forms.IntegerField(widget=forms.NumberInput(attrs={'placeholder':'Gözetmen Sayısı','class':'inputField form-control','id':'proctorInput'}),
                                required=False, label='')
     day=forms.DateField(widget=forms.DateInput(attrs={'placeholder':'gg/aa/yyyy','class':'inputField form-control datepicker','id':'dayInput','data-provide':"datepicker"}),input_formats=['%d/%m/%Y'],required=True,label='')
-    selection=forms.ChoiceField(widget=forms.RadioSelect(attrs={'class':'inputField ','id':'selectionInput'}),choices=SELECTIONTYPE,required=True,label='Rezervasyon Tercihiniz')
-    start=forms.TimeField(widget=forms.TimeInput(attrs={'placeholder':'ss:dd','class':'inputField form-control timepicker','id':'startInput'},format='%H:%M'),required=True,label='Başlangıç Saati')
-    end=forms.TimeField(widget=forms.TimeInput(attrs={'placeholder':'ss:dd','class':'inputField form-control timepicker','id':'endInput'},format='%H:%M'),required=True,label='Bitiş Saati')
+    selection=forms.ChoiceField(widget=forms.RadioSelect(attrs={'class':'inputField selectRadio','id':'selectionInput'}),choices=SELECTIONTYPE,required=True,label='Rezervasyon Tercihiniz')
+    start=forms.TimeField(widget=forms.TimeInput(attrs={'placeholder':'ss:dd','class':'inputField form-control timepickerM','id':'startInput'},format='%H:%M'),required=True,label='Başlangıç Saati')
+    end=forms.TimeField(widget=forms.TimeInput(attrs={'placeholder':'ss:dd','class':'inputField form-control timepickerM','id':'endInput'},format='%H:%M'),required=True,label='Bitiş Saati')
+    duration=forms.TimeField(widget=forms.TimeInput(attrs={'placeholder':'ss:dd','class':'inputField form-control timepicker','id':'durationInput','data-toggle':'timepicker','name':'timepicker'},format='%H:%M'),required=False,label='Etkinlik Süresi')
 
 class resNotPreferredForm(forms.Form):
     auto_id=False

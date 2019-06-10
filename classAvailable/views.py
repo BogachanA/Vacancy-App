@@ -81,6 +81,26 @@ def makeRes(request):
             if otherList: #prefList is a dict
                 return presentAlternatives(request,d,prefList,otherList)
             else: #prefList is a list
+                classes = prefList
+                rstart = datetime.datetime.combine(d['day'], d['start'])
+                rend = datetime.datetime.combine(d['day'], d['end'])
+                res = Reservation(description=d['desc'], student_total=d['capacity'],
+                                  instructor=d['instructor'], proctor_count=d['proctor'],
+                                  res_date_start=rstart, res_date_end=rend, id_list=[])
+                res.save(existing=True)
+                for c in classes:
+                    res.res_class.add(c)
+                for c in res.res_class.all():
+                    new_id = generateEvent(c.name, str(res.description),
+                                           str(res.instructor) + " - Proctor count: " + str(res.proctor_count),
+                                           manualDateTimeToGoogle(str(res.res_date_start)),
+                                           manualDateTimeToGoogle(str(res.res_date_end)))
+                    res.id_list.append(new_id)
+                res.save(existing=True)
+                print(res)
+                print("----> ids:", res.id_list)
+
+                return HttpResponseRedirect('newres')
                 print("others is none, selected are:")
                 print(prefList)
 
@@ -116,30 +136,29 @@ def presentAlternatives(request,form,prefs,others):
     return render(request,'newResStepTwo.html',context)
 
 
-def submitRes(request):
+def submitRes(request, form =None):
     if request.method == "POST":
         data=request.POST
-        classes=data.get('classList').split("-")
-
-        day=datetime.datetime.strptime(data.get('day'),"%B %d, %Y").date()
+        classes = data.get('classList').split("-")
+        day = datetime.datetime.strptime(data.get('day'), "%B %d, %Y").date()
         try:
-            stime=datetime.datetime.strptime(data.get('start'),"%I:%M %p").time()
+            stime = datetime.datetime.strptime(data.get('start'), "%I:%M %p").time()
         except:
-            stime=datetime.datetime.strptime(data.get('start'),"%I %p").time()
+            stime = datetime.datetime.strptime(data.get('start'), "%I %p").time()
         try:
-            etime=datetime.datetime.strptime(data.get('end'),"%I:%M %p").time()
+            etime = datetime.datetime.strptime(data.get('end'), "%I:%M %p").time()
         except:
             etime = datetime.datetime.strptime(data.get('end'), "%I %p").time()
         print("*******∆∆∆∆∆∆∆∆******")
-        print(stime,etime)
-        rstart=datetime.datetime.combine(day,stime)
-        rend=datetime.datetime.combine(day,etime)
-        res=Reservation(description=data.get('desc'),student_total=data.get('capacity'),
-                        instructor=data.get('instructor'), proctor_count=data.get('proctor'),
-                        res_date_start=rstart,res_date_end=rend,id_list=[])
+        print(stime, etime)
+        rstart = datetime.datetime.combine(day, stime)
+        rend = datetime.datetime.combine(day, etime)
+        res = Reservation(description=data.get('desc'), student_total=data.get('capacity'),
+                          instructor=data.get('instructor'), proctor_count=data.get('proctor'),
+                          res_date_start=rstart, res_date_end=rend, id_list=[])
         res.save(existing=True)
         for c in classes:
-            cl=Classroom.objects.get(name=c)
+            cl = Classroom.objects.get(name=c)
             res.res_class.add(cl)
 
         for c in res.res_class.all():
@@ -150,10 +169,8 @@ def submitRes(request):
             res.id_list.append(new_id)
         res.save(existing=True)
         print(res)
-        print("----> ids:",res.id_list)
+        print("----> ids:", res.id_list)
 
-    print("Ajax call received by Django.")
-    return HttpResponseRedirect('newres')
-    #return HttpResponse(json.dumps({"hi":3}),content_type="application/json")
-
-
+        print("Ajax call received by Django.")
+        return HttpResponseRedirect('newres')
+        # return HttpResponse(json.dumps({"hi":3}),content_type="application/json")

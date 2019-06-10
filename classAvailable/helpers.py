@@ -12,7 +12,7 @@ import VacancyApp
 from django.utils import timezone
 from tzlocal import get_localzone # $ pip install tzlocal
 
-def syncAllClassrooms():
+def syncAllReservations():
     classrooms=Classroom.objects.all()
     for c in classrooms:
         syncEventsFromCal(c.name)
@@ -122,7 +122,6 @@ def syncEventsFromCal(roomCode):
     NEXT_SYNC_TOKEN = events_result['nextSyncToken']
 
     print(service.settings().list().execute())
-    settings.TIME_ZONE=service.settings().list().execute()['timezone']
 
     # print(NEXT_SYNC_TOKEN)
     print("CURRENT_SYNC_TOKEN\t" + str(CURRENT_SYNC_TOKEN))
@@ -340,6 +339,7 @@ def isAvailable(cl,dts,dte):
 
 
 def resFromRequest(form):
+    #syncAllReservations()
     totalSeats=0
     finalClasses=[]
     classClashes={}
@@ -350,7 +350,12 @@ def resFromRequest(form):
     dte=datetime.datetime.combine(form['day'],form['end'])
     dte = pytz.timezone(settings.TIME_ZONE).localize(dte) #TODO find which timezone to compare
 
-    for c in form['pref_class']:
+    list1 = copy.deepcopy(list(form['pref_class']))
+
+    '''
+    for c in list1:
+        for i in range(1,len(list1)):
+            combinations=itertools.combinations(list1, i)
         # print(isAvailable(c,dts,dte))
         clashes = isAvailable(c, dts, dte)
         classClashes[c] = clashes
@@ -362,7 +367,27 @@ def resFromRequest(form):
                 return [k for k,v in classClashes.items() if len(v)==0], None
 
     #print("***",classClashes,"***")
+    '''
+    for c in list1:
+        clashes = isAvailable(c, dts, dte)
+        classClashes[c] = clashes
+    dictt={}
 
+    for i in range(len(list1)):
+        combinationsList=itertools.combinations(list1,i+1)
+        for combination in combinationsList:
+            totalSeats=0
+            for c in combination:
+                if len(classClashes[c])==0:
+                    totalSeats+=c.exam_capacity if form['type'] == '1' else c.capacity
+                    if totalSeats > form['capacity']:
+                        dictt[combination]=totalSeats
+                        break
+    if len(dictt.values())!=0:
+        min_value=min(dictt.values())
+        for k,v in dictt.items():
+            if min_value==v:
+                return list(k), None
 
     list1=copy.deepcopy(list(form['pref_class']))
     for i,v in classClashes.items():
