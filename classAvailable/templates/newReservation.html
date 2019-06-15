@@ -4,23 +4,27 @@
 
 {% block head %}
     {% block head2 %}
+        <link rel="stylesheet" href="{% static 'base/CSS/newRes.css' %}">
     {% endblock %}
 {% endblock %}
 
 {% block body %}
-<div class="container align-content-center align-items-center">
-    <div class="col-sm-12 col-md-8 col-lg-6 align-content-center align-items-center">
+    <div class="row justify-content-center" id="pageRow">
+    <div class="col-sm-11 col-md-10 col-lg-8 align-content-center align-items-center" id="formCol">
         {% block innerContent %}
-        <form id="resForm" method="post" action="{% url 'new_reservation' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
+            <div class="titleDiv" id="formTitleDiv">
+                <p class="card-title"></p>
+            </div>
+            <form id="resForm" method="post" action="{% url 'new_reservation' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
 
-            <button class="hoverButtons" type="submit" id="submitbutton">Submit</button>
-            <input type="hidden" name="next" value="{{next}}">
-        </form>
+                <button class="hoverButtons" type="submit" id="submitbutton">Submit</button>
+                <input type="hidden" name="next" value="{{next}}">
+            </form>
         {% endblock %}
     </div>
-</div>
+    </div>
 {% endblock %}
 
 {% block script %}

@@ -16,9 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path, include
 from .views import *
+from django.conf import settings
+from django.contrib.auth.views import auth_logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('classes/', include('classAvailable.urls'), name='class_views'),
     path('', home, name="homepage"),
+    path('logout/', log_out, name='log_out'),
+    path('login_error', login_error, name='loginError'),
+    path('', include('social_django.urls', namespace='social')),
+
 ]

@@ -5,10 +5,9 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from .models import Classroom, Reservation
+from .models import *
 import datetime
-from VacancyApp import settings
-import VacancyApp
+import VacancyApp.settings as st
 from django.utils import timezone
 from tzlocal import get_localzone # $ pip install tzlocal
 
@@ -77,7 +76,7 @@ def getCalendarID(service, roomCode):
     return 'none'
 
 
-def syncEventsFromCal(roomCode):
+def syncEventsFromCal(user,roomCode):
     # (str(datetime.datetime.now().date())+"T"+str(datetime.datetime.now().time().replace(microsecond=0)))
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
@@ -86,22 +85,36 @@ def syncEventsFromCal(roomCode):
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    try:
+        tm = TokenManager.objects.get(user=user)
+    except TokenManager.DoesNotExist:
+        tm=None
+    if not tm:
+        tm = TokenManager.objects.create(user=user)
+        tm.save()
+    try:
+        path_to_token = tm.token.path
+    except Exception as e:
+        print(e)
+        path_to_token = None
+    if path_to_token:
+        with open(path_to_token, 'rb') as token:
             creds = pickle.load(token)
-
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'classAvailable/client_secret_224280465504-kh3a3in47kd4l1titpu0a779be2hvdjm.apps.googleusercontent.com.json',
+                'classAvailable/client_secret_720492882415-bebdlfp307di9ih08tuila2elnbejga1.apps.googleusercontent.com.json',
                 SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(st.BASE_DIR+"/media/"+"/".join(["Pickles", user.username + ".pickle"]), 'wb') as token:
+            print("reobtained pickle")
             pickle.dump(creds, token)
+            tm.token.name = "/".join(["Pickles", user.username + ".pickle"])
+            tm.save()
 
     service = build('calendar', 'v3', credentials=creds)
 
@@ -213,13 +226,26 @@ def getUTCoffset():
     return hour_str + ":" + min_str
 
 
-def generateEvent(classRoom, title, instructor, start, end):
+def generateEvent(user, classRoom, title, instructor, start, end):
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    try:
+        tm = TokenManager.objects.get(user=user)
+    except TokenManager.DoesNotExist:
+        tm = None
+    if not tm:
+        tm=TokenManager.objects.create(user=user)
+        tm.save()
+
+    try:
+        path_to_token=tm.token.path
+    except Exception as e:
+        print(e)
+        path_to_token=None
+    if path_to_token:
+        with open(path_to_token, 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -227,11 +253,14 @@ def generateEvent(classRoom, title, instructor, start, end):
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secret_224280465504-kh3a3in47kd4l1titpu0a779be2hvdjm.apps.googleusercontent.com.json', SCOPES)
+                'classAvailable/client_secret_720492882415-bebdlfp307di9ih08tuila2elnbejga1.apps.googleusercontent.com.json', SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(st.BASE_DIR+"/media/"+"/".join(["Pickles", user.username + ".pickle"]), 'wb') as token:
+            print("Reobtained pickle123")
             pickle.dump(creds, token)
+            tm.token.name = "/".join(["Pickles", user.username + ".pickle"])
+            tm.save()
 
     service = build('calendar', 'v3', credentials=creds)
 
@@ -279,13 +308,12 @@ def removeEvent(roomCode, id):
             res.res_class.remove(Classroom.objects.get(name=roomCode))
 
 def updateEvent(roomCode, id):
-    res = Reservation.objects.filter(id_list__contains=[id]).all()
+    res = Reservation.objects.filter(id_list__contains=[id]).first()
 
     print(res)
     if not res:
         return False
     else:
-        res.first().delete()
         res.id_list.remove(id)
         resses = res.res_class.all()
         if len(resses) == 1:

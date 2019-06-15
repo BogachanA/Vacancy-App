@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compressor',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,37 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+
+#Media Files
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+#Social Authentication
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'VacancyApp.pipelines.create_user',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '720492882415-bebdlfp307di9ih08tuila2elnbejga1.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'nSLWlQc83HLR4bAs9syWt7u7'
+
+LOGIN_URL = '/auth/login/google-oauth2'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL='/login_error'
+LOGOUT_REDIRECT_URL = '/'

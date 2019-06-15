@@ -7,6 +7,11 @@ class ClassAdmin(admin.ModelAdmin):
     list_display = ('name','capacity','exam_capacity','type')
     ordering = ('name',)
 
+
+class TokenMAdmin(admin.ModelAdmin):
+    list_display = ('user',)
+
+
 class ResAdmin(admin.ModelAdmin):
     list_display = ('by','get_class_list','description','instructor','res_date_start','res_date_end')
     ordering = ('res_date_start','description')
@@ -22,4 +27,5 @@ class ResAdmin(admin.ModelAdmin):
 """
 
 admin.site.register(Classroom,ClassAdmin)
+admin.site.register(TokenManager,TokenMAdmin)
 admin.site.register(Reservation,ResAdmin)

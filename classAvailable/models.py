@@ -4,7 +4,14 @@ from django.contrib.postgres.fields import ArrayField
 import datetime
 
 
+
+def token_upload_path(instance, filename):
+    return "/".join(["Pickles",str(instance.id), filename])
+
 #TODO custom user
+class TokenManager(models.Model):
+    user = models.OneToOneField(get_user_model(),null=False, on_delete=models.CASCADE)
+    token = models.FileField(upload_to=token_upload_path,null=True)
 
 # Create your models here. Wassup
 class Classroom(models.Model):

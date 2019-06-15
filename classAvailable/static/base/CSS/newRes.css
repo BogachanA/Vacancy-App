@@ -1,0 +1,9 @@
+#pageRow{
+    background-image: url('../img/class_corridor.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    padding-top: 40px;
+    padding-bottom: 40px;
+}

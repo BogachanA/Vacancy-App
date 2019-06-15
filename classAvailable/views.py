@@ -18,7 +18,7 @@ def populateClassCal(request, classID):
             #return HttpResponse("Hello, population of " + classID + " is successful.")
 
         u=request.user
-        event_list = syncEventsFromCal(classID)
+        event_list = syncEventsFromCal(u,classID)
         if event_list:
             for d in event_list.keys():
                 parsed_data = d.split("*")
@@ -70,6 +70,9 @@ def returnTZ(request):
 def makeRes(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        print('redirecting')
+        return HttpResponseRedirect('/login/google-oauth2')
 
     if request.method == "POST":
         form = resForm(request.POST)
@@ -91,7 +94,7 @@ def makeRes(request):
                 for c in classes:
                     res.res_class.add(c)
                 for c in res.res_class.all():
-                    new_id = generateEvent(c.name, str(res.description),
+                    new_id = generateEvent(user, c.name, str(res.description),
                                            str(res.instructor) + " - Proctor count: " + str(res.proctor_count),
                                            manualDateTimeToGoogle(str(res.res_date_start)),
                                            manualDateTimeToGoogle(str(res.res_date_end)))
@@ -162,7 +165,7 @@ def submitRes(request, form =None):
             res.res_class.add(cl)
 
         for c in res.res_class.all():
-            new_id = generateEvent(c.name, str(res.description),
+            new_id = generateEvent(request.user,c.name, str(res.description),
                                    str(res.instructor) + " - Proctor count: " + str(res.proctor_count),
                                    manualDateTimeToGoogle(str(res.res_date_start)),
                                    manualDateTimeToGoogle(str(res.res_date_end)))
@@ -174,3 +177,12 @@ def submitRes(request, form =None):
         print("Ajax call received by Django.")
         return HttpResponseRedirect('newres')
         # return HttpResponse(json.dumps({"hi":3}),content_type="application/json")
+
+
+def resCreated(request, rID):
+    context={}
+    if rID:
+        context['res']=Reservation.objects.filter(id_list__contains=[rID]).first()
+        return render(request,'resSuccess.html',context)
+    else:
+        return HttpResponseRedirect('/')

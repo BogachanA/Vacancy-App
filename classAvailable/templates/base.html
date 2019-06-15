@@ -22,81 +22,112 @@
         <link rel="stylesheet" href="{% static 'base/CSS/jquery-ui.css' %}">
         <link rel="stylesheet" href="{% static 'base/CSS/jquery-ui.theme.css' %}">
 
+        <!-- custom css -->
+        <link rel="stylesheet" href="{% static 'base/CSS/base.css' %}">
+
     {% endcompress %}
 
+    <script src="https://kit.fontawesome.com/3ac6e51aa8.js"></script>
 
     {% block head %}
     <title>Vacany App - Welcome</title>
     {% endblock %}
 </head>
 <body>
-    {% block body %}
-
-        <!-- nav
-        <div class="container-fluid" id="allContainer">
-            <nav class="iconav">
-                <a class="iconav-brand" href="{% url 'homepage' %}">
-                  <span class="icon icon-home iconav-brand-icon"></span>
-                </a>
-                <div class="iconav-slider">
-                  <ul class="nav nav-pills iconav-nav flex-md-column">
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Overview" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-leaf"></span>
-                        <small class="iconav-nav-label hidden-md-up">Overview</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Order history" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-text-document"></span>
-                        <small class="iconav-nav-label hidden-md-up">History</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Fluid layout" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-globe"></span>
-                        <small class="iconav-nav-label hidden-md-up">Fluid layout</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Icon-nav layout" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-area-graph"></span>
-                        <small class="iconav-nav-label hidden-md-up">Icon nav</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#" title="Docs" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-list"></span>
-                        <small class="iconav-nav-label hidden-md-up">Docs</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Light UI" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <span class="icon icon-flash"></span>
-                        <small class="iconav-nav-label hidden-md-up">Light UI</small>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#" title="Signed in as mdo" data-toggle="tooltip" data-placement="right" data-container="body">
-                        <img src="../assets/img/avatar-mdo.png" alt="" class="img-circle img-responsive">
-                        <small class="iconav-nav-label hidden-md-up">@mdo</small>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-            </nav>
-
-
-
-
+    <!--
+    <nav class="col-md-2 iconav" id="navCol">
+        <a class="iconav-brand" href="{% url 'homepage' %}">
+          <span class="icon icon-home iconav-brand-icon"></span>
+        </a>
+        <div class="iconav-slider">
+          <ul class="nav nav-pills iconav-nav flex-md-column">
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Overview" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-leaf"></span>
+                <small class="iconav-nav-label hidden-md-up">Overview</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Order history" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-text-document"></span>
+                <small class="iconav-nav-label hidden-md-up">History</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Fluid layout" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-globe"></span>
+                <small class="iconav-nav-label hidden-md-up">Fluid layout</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Icon-nav layout" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-area-graph"></span>
+                <small class="iconav-nav-label hidden-md-up">Icon nav</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#" title="Docs" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-list"></span>
+                <small class="iconav-nav-label hidden-md-up">Docs</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Light UI" data-toggle="tooltip" data-placement="right" data-container="body">
+                <span class="icon icon-flash"></span>
+                <small class="iconav-nav-label hidden-md-up">Light UI</small>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" title="Signed in as mdo" data-toggle="tooltip" data-placement="right" data-container="body">
+                <img src="../assets/img/avatar-mdo.png" alt="" class="img-circle img-responsive">
+                <small class="iconav-nav-label hidden-md-up">@mdo</small>
+              </a>
+            </li>
+          </ul>
         </div>
-
+    </nav>
         -->
 
-        <p>{{ ip }}</p>
 
 
-    {% endblock %}
+
+        <div class="container-fluid" id="allContainer">
+            <div class="row" id="allRow">
+                <nav class="col-md-1 navbar navbar-expand-md navbar-light bg-light" id="nav">
+                    <a class="navbar-brand " href="{% url 'homepage' %}" id="logolink"><i class="fas fa-2x fa-door-open" id="logo"></i><p class="navLabel"> Vacany App</p></a>
+                  <button class="navbar-toggler" id="navCollapseButton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                    <hr style="margin: 10px;">
+                  <div class="collapse navbar-collapse flex-md-column" id="navbarSupportedContent">
+                    <ul class="navbar-nav flex-md-column">
+                      <li class="nav-item active">
+                        <a class="nav-link" href="#"><i class="far fa-2x fa-calendar-alt navIcon"></i><p class="navLabel" > Takvimler</p></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'new_reservation' %}"><i class="fas fa-2x fa-concierge-bell navIcon"></i><p class="navLabel" > Rezervasyon Yap</p></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-2x fa-user-lock navIcon"></i><p class="navLabel" > Giriş Yap</p></a>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
+
+                <!-- page content -->
+                <div class="col" id="pageCol">
+                    {% block body %}
+                     <p>{{ ip }}</p>
+                        <a href="{% url 'social:begin' 'google-oauth2' %}"><input value="Login" class="btn btn-success" type="button"></a>
+                    <div class="temp" style="background: red; border: 10px solid black;"></div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+
+
+
 
     <!-- jQuery, jQueryUI and Bootstrap CSS -->
     <script
@@ -124,7 +155,42 @@
                 dateFormat: 'dd/mm/yy',
                 startDate: '-3d'
             });
+
+
+            if ($( window ).width() < 768) $("#nav").removeClass("container-fill-height");
+                else $("#nav").addClass("container-fill-height");
+
+            $( window ).resize(function() {
+                if ($( window ).width() < 768) $("#nav").removeClass("container-fill-height");
+                else $("#nav").addClass("container-fill-height");
+            });
+
+            let labelList=[]
+            let lbCounter=0
+            $(".navLabel").each(function(){
+                    labelList.push($(this).css('width'));
+                    console.log("workin it");
+                    $(this).width('50px');
+                    lbCounter+=1;
+            });
+
+            $("nav").hover(function () {
+                $(this).animate({'padding':'15px 10px 15px 10px'}).clearQueue().css('text-align','left');
+                lbCounter=0;
+                $(".navLabel").each(function(){
+                    $(this).css({'width':""+labelList[lbCounter]});
+                });
+            }).mouseleave(function () {
+                lbCounter=0;
+                $(this).animate({'padding':'15px 0px 15px 0px'}).clearQueue().css('text-align','center');
+                $(".navLabel").each(function(){
+                    $(this).css({'width':"0px"});
+
+                });
+            });
+
         });
+
     </script>
 
     {% block script %}
