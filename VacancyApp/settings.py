@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'social_django',
+    'schedule'
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,8 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL='/login_error'
 LOGOUT_REDIRECT_URL = '/'
+
+
+
+#Django Scheduler
+FIRST_DAY_OF_WEEK=1

@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -30,7 +33,7 @@
     <script src="https://kit.fontawesome.com/3ac6e51aa8.js"></script>
 
     {% block head %}
-    <title>Vacany App - Welcome</title>
+    <title>Vacany App</title>
     {% endblock %}
 </head>
 <body>
@@ -93,12 +96,30 @@
 
         <div class="container-fluid" id="allContainer">
             <div class="row" id="allRow">
-                <nav class="col-md-1 navbar navbar-expand-md navbar-light bg-light" id="nav">
-                    <a class="navbar-brand " href="{% url 'homepage' %}" id="logolink"><i class="fas fa-2x fa-door-open" id="logo"></i><p class="navLabel"> Vacany App</p></a>
-                  <button class="navbar-toggler" id="navCollapseButton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                    <hr style="margin: 10px;">
+                <nav class="col-md-2 navbar navbar-expand-md navbar-light" id="nav">
+                    <div id="navbarTop">
+                        <a class="navbar-brand " href="{% url 'homepage' %}" id="logolink"><i class="fas fa-2x fa-door-open" id="logo"></i><p class="navLabel" style="font-family: 'Open Sans', sans-serif;"> Vacany App</p>
+                        <svg id="waves" width="100%" height="92px" viewBox="0 0 250 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Desktop-HD" transform="translate(0.000000, -140.000000)" fill="#FFFFFF">
+                                    <g id="Left-Part">
+                                        <g id="Group-2">
+                                            <g id="Group" transform="translate(0.000000, 140.277778)">
+                                                <path d="M0,24.7665454 C32.0642031,50.515917 73.6450687,53.8967468 124.742597,34.9090348 C175.840125,15.9213227 217.592593,19.316105 250,45.0933817 L250,91.5781691 L0,91.5781691 L0,24.7665454 Z" id="Rectangle"></path>
+                                                <path d="M0,16.7551642 C32.0642031,45.6057448 73.6450687,49.3937558 124.742597,28.1191971 C175.840125,6.84463849 217.592593,10.6482824 250,39.5301289 L250,91.6134622 L0,91.6134622 L0,16.7551642 Z" id="Rectangle-Copy-2" opacity="0.14"></path>
+                                                <path d="M0,8.42183088 C32.0642031,37.2724115 73.6450687,41.0604225 124.742597,19.7858638 C175.840125,-1.48869484 217.592593,2.31494906 250,31.1967955 L250,83.2801289 L0,83.2801289 L0,8.42183088 Z" id="Rectangle-Copy-4" opacity="0.1"></path>
+                                                <path d="M0,2.17183088 C32.0642031,31.0224115 73.6450687,34.8104225 124.742597,13.5358638 C175.840125,-7.73869484 217.592593,-3.93505094 250,24.9467955 L250,77.0301289 L0,77.0301289 L0,2.17183088 Z" id="Rectangle-Copy-5" opacity="0.05"></path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg></a>
+                          <button class="navbar-toggler" id="navCollapseButton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                    </div>
+
                   <div class="collapse navbar-collapse flex-md-column" id="navbarSupportedContent">
                     <ul class="navbar-nav flex-md-column">
                       <li class="nav-item active">
@@ -120,6 +141,8 @@
                      <p>{{ ip }}</p>
                         <a href="{% url 'social:begin' 'google-oauth2' %}"><input value="Login" class="btn btn-success" type="button"></a>
                     <div class="temp" style="background: red; border: 10px solid black;"></div>
+
+
                     {% endblock %}
                 </div>
             </div>
@@ -165,6 +188,8 @@
                 else $("#nav").addClass("container-fill-height");
             });
 
+            /*
+
             let labelList=[]
             let lbCounter=0
             $(".navLabel").each(function(){
@@ -178,16 +203,19 @@
                 $(this).animate({'padding':'15px 10px 15px 10px'}).clearQueue().css('text-align','left');
                 lbCounter=0;
                 $(".navLabel").each(function(){
-                    $(this).css({'width':""+labelList[lbCounter]});
+                    $(this).css({'width':""+labelList[lbCounter],'padding-left':"10px"});
                 });
             }).mouseleave(function () {
                 lbCounter=0;
                 $(this).animate({'padding':'15px 0px 15px 0px'}).clearQueue().css('text-align','center');
                 $(".navLabel").each(function(){
-                    $(this).css({'width':"0px"});
+                    $(this).css({'width':"0px",'padding-left':"0px"});
 
                 });
             });
+
+            */
+
 
         });
 

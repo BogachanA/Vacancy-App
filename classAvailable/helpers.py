@@ -374,9 +374,9 @@ def resFromRequest(form):
 
     preferred_done=False
     dts=datetime.datetime.combine(form['day'],form['start'])  #TODO timezone info from user
-    dts=pytz.timezone(settings.TIME_ZONE).localize(dts)
+    dts=pytz.timezone(st.TIME_ZONE).localize(dts)
     dte=datetime.datetime.combine(form['day'],form['end'])
-    dte = pytz.timezone(settings.TIME_ZONE).localize(dte) #TODO find which timezone to compare
+    dte = pytz.timezone(st.TIME_ZONE).localize(dte) #TODO find which timezone to compare
 
     list1 = copy.deepcopy(list(form['pref_class']))
 
