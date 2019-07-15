@@ -98,7 +98,10 @@
             <div class="row" id="allRow">
                 <nav class="col-md-2 navbar navbar-expand-md navbar-light" id="nav">
                     <div id="navbarTop">
-                        <a class="navbar-brand " href="{% url 'homepage' %}" id="logolink"><i class="fas fa-2x fa-door-open" id="logo"></i><p class="navLabel" style="font-family: 'Open Sans', sans-serif;"> Vacany App</p>
+                        <a class="navbar-brand " style="width:80%; margin:0 auto;" href="{% url 'homepage' %}" id="logolink">
+                            <img id="navLogo" src="{% static 'base/img/vacancylogo.png' %}">
+                        </a>
+
                         <svg id="waves" width="100%" height="92px" viewBox="0 0 250 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <g id="Desktop-HD" transform="translate(0.000000, -140.000000)" fill="#FFFFFF">
@@ -114,7 +117,7 @@
                                     </g>
                                 </g>
                             </g>
-                        </svg></a>
+                        </svg>
                           <button class="navbar-toggler" id="navCollapseButton" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                           </button>
@@ -122,7 +125,7 @@
 
                   <div class="collapse navbar-collapse flex-md-column" id="navbarSupportedContent">
                     <ul class="navbar-nav flex-md-column">
-                      <li class="nav-item active">
+                      <li class="nav-item">
                         <a class="nav-link" href="#"><i class="far fa-2x fa-calendar-alt navIcon"></i><p class="navLabel" > Takvimler</p></a>
                       </li>
                       <li class="nav-item">
