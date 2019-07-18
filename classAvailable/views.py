@@ -104,8 +104,6 @@ def makeRes(request):
                 print("----> ids:", res.id_list)
 
                 return HttpResponseRedirect('newres')
-                print("others is none, selected are:")
-                print(prefList)
 
 
 
@@ -175,14 +173,22 @@ def submitRes(request, form =None):
         print("----> ids:", res.id_list)
 
         print("Ajax call received by Django.")
-        return HttpResponseRedirect('newres')
-        # return HttpResponse(json.dumps({"hi":3}),content_type="application/json")
+        # return HttpResponseRedirect('newres')
+        return HttpResponse(json.dumps({"new_id":res.id_list[0]}),content_type="application/json")
 
 
 def resCreated(request, rID):
     context={}
     if rID:
-        context['res']=Reservation.objects.filter(id_list__contains=[rID]).first()
+        res=Reservation.objects.filter(id_list__contains=[rID]).first()
+        context['res']=res
+        classes=[x.name for x in res.res_class.all()]
+        cs=""
+        for c in classes: cs+=c+","
+        context["cs"]=cs[:len(cs)-1]
+        context["date"]=res.res_date_start.date().strftime("%d-%m-%Y")
+        context["sTime"]=res.res_date_start.time().strftime("%H:%M")
+        context["eTime"]=res.res_date_end.time().strftime("%H:%M")
         return render(request,'resSuccess.html',context)
     else:
         return HttpResponseRedirect('/')

@@ -5,7 +5,7 @@ USER_FIELDS = ['username', 'email']
 
 
 def get_list_of_emails():
-    return ['bogacbugra@gmail.com','alpgokcek89@gmail.com','thevacancyapp@gmail.com','bogachanarslan@sabanciuniv.edu','gokcekal@mef.edu.tr']
+    return ['bogacbugra@gmail.com', 'alpgokcek89@gmail.com', 'thevacancyapp@gmail.com', 'bogachanarslan@sabanciuniv.edu', 'gokcekal@mef.edu.tr']
 
 
 def create_user(strategy, details, user=None, *args, **kwargs):

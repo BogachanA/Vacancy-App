@@ -3,6 +3,8 @@
     --bro: #D58658;
     --org: #FECA36;
     --lighty: #FFEDC3;
+    --vblue: #44566C;
+    --vaqua: #00aafd;
 }
 
 @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
@@ -12,6 +14,11 @@
     margin: 0;
     height: 100%;
     font-family: 'Open Sans', sans-serif;
+}
+
+.vat{
+    font-family: 'Open Sans', sans-serif;
+    color: var(--vblue);
 }
 
 .col{

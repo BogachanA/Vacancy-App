@@ -7,5 +7,5 @@ urlpatterns = [
     path('timezone/', views.returnTZ, name='timezone_retrieve'),
     path('newres',views.makeRes, name='new_reservation'),
     path('submitRes',views.submitRes, name='submit_reservation'),
-    path('success/id?=<str:resID>',views.resCreated,name='success'),
+    path('success/id=<str:rID>',views.resCreated,name='success'),
 ]

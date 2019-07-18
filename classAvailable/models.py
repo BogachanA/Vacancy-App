@@ -13,6 +13,8 @@ class TokenManager(models.Model):
     user = models.OneToOneField(get_user_model(),null=False, on_delete=models.CASCADE)
     token = models.FileField(upload_to=token_upload_path,null=True)
 
+
+
 # Create your models here. Wassup
 class Classroom(models.Model):
     name = models.CharField(max_length=15, null=False, default="001")

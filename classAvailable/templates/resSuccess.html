@@ -1,15 +1,112 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <title>Reservation Created</title>
+    <style>
+    .st{
+        color:#44566C;
+        font-family:'Open Sans', sans-serif;
+        display:block;
+    }
+    #successTitle{
+        font-size:2em;
+        font-weight: bold;
+        margin-top:12px;
+    }
+    #infoTitle{
+        font-size:1.1em;
+        font-weight: bold;
+        margin-top: 24px;
+    }
+    #dataTable{
+        border: 1px solid #B9C4CF;
+    }
+    .dAnswer{
+        text-align: right;
+    }
+    .dt{
+        font-size: 0.8em;
+        display:inline-table;
+        width: 49.5%;
+    }
+    .dt td{
+        padding: 15px 20px;
+    }
+    .dTitle{
+        font-weight: lighter;
+    }
+    .dAnswer{
+        font-weight: bold;
+    }
+    .dt tbody{
+        width: 100%;
+    }
+    </style>
+{% endblock %}
+
 {% block body %}
-<div class="container" id="allContainer">
-    <div class="row align-items-center">
-        <div class="col-10 col-md-8 col-lg-6" id="succesInfo">
-            <p id="succesIcon"><i class="fas fa-clipboard-check"></i></p>
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8" id="succesInfo" style="padding-top:50px">
+            <p id="succesIcon" class="justify-content-center text-center">
+                <svg id="tick"
+                     width="13vw" height="13vw" viewBox="0 0 282 282" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Successful" transform="translate(-706.000000, -125.000000)">
+                            <g id="Check" transform="translate(707.000000, 126.000000)">
+                                <circle id="Oval" stroke="#979797" stroke-width="0.7" fill="#56A602" cx="140" cy="140" r="140"></circle>
+                                <path d="M210.116063,81.8388812 C207.327721,79.1664409 202.795236,79.1559609 199.990335,81.8175031 L115.869163,161.639223 C113.065219,164.299856 108.504591,164.326429 105.672962,161.689491 L79.7801274,137.576949 C76.9528645,134.944078 72.4377532,135.016504 69.6968898,137.737182 L60.9640253,146.405733 C58.2224698,149.127098 58.2699712,153.495653 61.0658185,156.159073 L105.169892,198.174127 C107.967667,200.839383 112.508196,200.84557 115.317082,198.182604 L218.918629,99.9631088 C221.724993,97.3025343 221.735082,92.9749394 218.951261,90.3068314 L210.116063,81.8388812 Z" id="checkmark" fill="#FFFFFF"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="st" id="successTitle">Reservation Successfully Created</span>
+                <span class="st" id="infoTitle">Rezervasyon Detayları</span>
+                <div class="st" id="dataTable">
+                    <table id="dt1" class="st dt">
+                        <tr>
+                            <td class="dTitle">Açıklama</td>
+                            <td class="dAnswer">{{ res.description }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Kişi Sayısı</td>
+                            <td class="dAnswer">{{ res.student_total }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Öğretim Üyesi</td>
+                            <td class="dAnswer">{{ res.instructor }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Sınıflar</td>
+                            <td class="dAnswer">{{ cs }}</td>
+                        </tr>
+                    </table>
+                    <table id="dt2" class="st dt">
+                        <tr>
+                            <td class="dTitle">Etkinlik Sahibi</td>
+                            <td class="dAnswer">{{ res.by.username }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Etkinlik Tarihi</td>
+                            <td class="dAnswer">{{ date }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Başlangıç Saati</td>
+                            <td class="dAnswer">{{ sTime }}</td>
+                        </tr>
+                        <tr>
+                            <td class="dTitle">Bitiş Saati</td>
+                            <td class="dAnswer">{{ eTime }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <span class="st" id="timer"><span id="tSec"></span> </span>
+            </p>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block script%}
+<script>
 
+</script>
 {% endblock %}
