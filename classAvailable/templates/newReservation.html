@@ -31,6 +31,9 @@
     <script>
         $(function () {
             console.log('document ready');
+            $("#resForm > *").each(function(){
+               $(this).addClass("vat");
+            });
             $('.timepickerM').mdtimepicker({
                 timeFormat:'hh:mm',
                 format:'hh:mm',

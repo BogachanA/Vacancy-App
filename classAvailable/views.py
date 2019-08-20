@@ -64,7 +64,49 @@ def returnTZ(request):
     #return HttpResponse(request.session.get('django_timezone'))
 
 
+OPTIONS = """{  timeFormat: "H:mm",
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay',
+                },
+                allDaySlot: false,
+                firstDay: 0,
+                weekMode: 'liquid',
+                slotMinutes: 15,
+                defaultEventMinutes: 30,
+                minTime: 8,
+                maxTime: 20,
+                editable: false,
+                dayClick: function(date, allDay, jsEvent, view) {
+                    if (allDay) {       
+                        $('#calendar').fullCalendar('gotoDate', date)      
+                        $('#calendar').fullCalendar('changeView', 'agendaDay')
+                    }
+                },
+                eventClick: function(event, jsEvent, view) {
+                    if (view.name == 'month') {     
+                        $('#calendar').fullCalendar('gotoDate', event.start)      
+                        $('#calendar').fullCalendar('changeView', 'agendaDay')
+                    }
+                },
+            }"""
+
+
 #********************** Url Views ************************#
+
+
+def calendars(request,className):
+    event_url='calVal/'+className
+    print("-----")
+    return render(request,'calendar.html',{'calendar_config_options':calendar_options(event_url,OPTIONS)})
+
+
+def calVal(request,className):
+    print("in calval")
+    cl=Classroom.objects.get(name=className)
+    events = Reservation.objects.filter(res_class__in=[cl])
+    return HttpResponse(res_to_json(events),content_type='application/json')
 
 
 def makeRes(request):
@@ -137,7 +179,7 @@ def presentAlternatives(request,form,prefs,others):
     return render(request,'newResStepTwo.html',context)
 
 
-def submitRes(request, form =None):
+def submitRes(request, form=None):
     if request.method == "POST":
         data=request.POST
         classes = data.get('classList').split("-")

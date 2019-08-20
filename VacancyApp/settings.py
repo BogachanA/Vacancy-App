@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'social_django',
-    'schedule'
+    'schedule',
+    'fullcalendar'
 ]
 
 MIDDLEWARE = [
@@ -176,6 +177,14 @@ SOCIAL_AUTH_LOGIN_ERROR_URL='/login_error'
 LOGOUT_REDIRECT_URL = '/'
 
 
-
 #Django Scheduler
 FIRST_DAY_OF_WEEK=1
+
+
+FULLCALENDAR = {
+    'css_url': '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css',
+    'print_css_url': '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.print.css',
+    'javascript_url': '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js',
+    'jquery_url': '//code.jquery.com/jquery-2.1.0.min.js',
+    'jquery_ui_url': '//code.jquery.com/ui/1.10.4/jquery-ui.js',
+}
